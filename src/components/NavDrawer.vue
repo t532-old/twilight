@@ -1,0 +1,45 @@
+<template>
+    <v-navigation-drawer
+        v-model="nav.drawer"
+        absolute
+        temporary
+    >
+        <v-list-item>
+            <v-list-item-content>
+                <v-list-item-title class="title">
+                    <span>WhoJudge</span>
+                    <span class="font-weight-light">OJ</span>
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                    Light, modern, simplistic OJ
+                </v-list-item-subtitle>
+            </v-list-item-content>
+        </v-list-item>
+        <v-divider />
+        <v-list nav dense>
+            <v-list-item
+                v-for="item in nav.items"
+                :key="item.name"
+                link
+                :href="item.href"
+            >
+                <v-list-item-icon>
+                    <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title>{{ item.name }}</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
+        </v-list>
+    </v-navigation-drawer>
+</template>
+
+<script>
+import nav from '@/shared/nav'
+export default {
+    name: 'NavDrawer',
+    data: () => ({
+        nav,
+    })
+}
+</script>

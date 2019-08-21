@@ -1,31 +1,52 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+    <v-app>
+        <NavDrawer />
+
+        <AppBar />
+
+        <v-content>
+            <router-view />
+        </v-content>
+    </v-app>
 </template>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
+<script>
+import gql from 'graphql-tag'
+import NavDrawer from './components/NavDrawer'
+import AppBar from './components/AppBar'
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+import user from './shared/user'
+import client from './client'
+import { validateID } from './util'
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+export default {
+    name: 'App',
+    components: {
+        NavDrawer,
+        AppBar,
+    },
+    data: () => ({
+        user,
+    }),
+    async mounted() {
+        const token = validateID(localStorage.getItem('userToken'))
+        if (token) {
+            const { data: { token } } = await client.query({
+                query: gql`query userInfo($userToken: ID!) {
+                    token(id: $userToken) {
+                        user {
+                            isAdmin
+                            id
+                            username
+                        }
+                    }
+                }`,
+                variables: {
+                    userToken: localStorage.getItem('userToken') || ''
+                }
+            })
+            this.user.info = token ? token.user : this.user.info
+        }
+    }
+};
+</script>

@@ -1,5 +1,5 @@
 {
-  "name": "twillight",
+  "name": "twilight",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -7,13 +7,22 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.6.3",
+    "apollo-client": "^2.6.4",
+    "apollo-upload-client": "^11.0.0",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.0.3",
+    "vuetify": "^2.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.10.0",
     "@vue/cli-service": "^3.10.0",
-    "vue-template-compiler": "^2.6.10"
+    "graphql-tag": "^2.10.1",
+    "sass": "^1.17.4",
+    "sass-loader": "^7.1.0",
+    "vue-cli-plugin-vuetify": "^0.6.3",
+    "vue-template-compiler": "^2.6.10",
+    "vuetify-loader": "^1.2.2"
   }
 }
