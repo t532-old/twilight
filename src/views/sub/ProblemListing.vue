@@ -2,7 +2,7 @@
     <div>
         <v-card-text>
             <v-list-item
-                class="elevation-3"
+                class="elevation-2"
                 v-for="problem in problems"
                 :key="problem.id"
                 :to="`/problem/${problem.id}`"
@@ -11,8 +11,11 @@
                     <v-list-item-title>
                         <span class="text--secondary">Problem #{{ problem.order + 1 }} ::</span>
                         {{ problem.title }}
+                        
                     </v-list-item-title>
                 </v-list-item-content>
+                <v-spacer />
+                <v-icon>mdi-chevron-right</v-icon>
             </v-list-item>
         </v-card-text>
         <v-card-actions>

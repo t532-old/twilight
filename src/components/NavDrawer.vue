@@ -7,8 +7,8 @@
         <v-list-item>
             <v-list-item-content>
                 <v-list-item-title class="title">
-                    <span>WhoJudge</span>
-                    <span class="font-weight-light">OJ</span>
+                    <span>Wh</span>
+                    <span class="font-weight-light">OJudge</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
                     Light, modern, simplistic OJ

@@ -1,6 +1,5 @@
 <template>
     <v-container
-        class="fill-height"
         fluid
     >
         <v-card class="elevation-12 mx-auto" width="1000" tile>
@@ -15,28 +14,32 @@
                     </span>
                     {{ info.title }}
                 </v-toolbar-title>
-            </v-toolbar>
-            <v-tabs
-                v-model="tab"
-                background-color="primary"
-                dark
-                style="overflow: hidden"
-            >
-                <v-tabs-slider></v-tabs-slider>
+                <template v-slot:extension>
+                    <v-tabs
+                        v-model="tab"
+                        background-color="primary"
+                        dark
+                        style="overflow: hidden"
+                    >
+                        <v-tabs-slider></v-tabs-slider>
 
-                <v-tab :to="`/scope/${info.id}/info`">
-                    <v-icon>mdi-information</v-icon>
-                    Info
-                </v-tab>
-                <v-tab :to="`/scope/${info.id}/problems`" >
-                    <v-icon>mdi-playlist-check</v-icon>
-                    Problems
-                </v-tab>
-            </v-tabs>
-            
+                        <v-tab :to="`/scope/${info.id}/info`" style="margin-left: 0;">
+                            <v-icon>mdi-information</v-icon>
+                            Info
+                        </v-tab>
+                        <v-tab :to="`/scope/${info.id}/problems`" >
+                            <v-icon>mdi-playlist-check</v-icon>
+                            Problems
+                        </v-tab>
+                        <v-tab v-if="info.isContest" :to="`/scope/${info.id}/participants`" >
+                            <v-icon>mdi-chevron-double-up</v-icon>
+                            Ranking
+                        </v-tab>
+                    </v-tabs>
+                </template>
+            </v-toolbar>
             <template v-if="mode === 'info'">
                 <v-card-text>
-                    <p class="text--secondary">Scope#{{ info.id }}</p>
                     <div class="text-uppercase">Description</div>
                     <v-card>
                         <v-card-text class="text--primary markdown">
@@ -44,6 +47,10 @@
                         </v-card-text>
                     </v-card>
                 </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <span style="font-size: smaller" class="text--secondary">Scope#{{ info.id }}</span>
+                </v-card-actions>
                 <v-card-actions>
                     <v-spacer />
                     <v-dialog
@@ -181,6 +188,10 @@
                 </v-card>
                 <ProblemListing :scopeInfo="info" />
             </template>
+
+            <template v-if="mode === 'participant'">
+                <ParticipantListing :scope="info.id" />
+            </template>
         </v-card>
         <v-snackbar v-model="onError">
             {{ error ? error.message.split(':')[1] : 'Something went wrong' }}
@@ -201,6 +212,8 @@ import client from '@/client'
 import { validateID } from '@/util'
 import gql from 'graphql-tag'
 import ProblemListing from './sub/ProblemListing'
+import ParticipantListing from './sub/ParticipantListing'
+import initTheme from '@/theme'
 
 function toMomentCompatibleString(date, time) {
     return `${date}T${time}`
@@ -242,6 +255,7 @@ export default {
     }),
     components: {
         ProblemListing,
+        ParticipantListing,
     },
     methods: {
         async update() {
@@ -308,6 +322,7 @@ export default {
         }
     },
     async mounted() {
+        initTheme(this, 'orange')
         try {
             const id = validateID(this.$route.params.id)
             if (id) {

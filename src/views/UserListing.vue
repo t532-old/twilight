@@ -1,6 +1,5 @@
 <template>
     <v-container
-        class="fill-height"
         fluid
     >
         <v-card class="elevation-12 mx-auto" width="1000" tile>
@@ -13,7 +12,7 @@
             </v-toolbar>
             <v-card-text>
                 <v-list-item
-                    class="elevation-3"
+                    class="elevation-2"
                     v-for="user in users"
                     :key="user.id"
                     :to="`/user/${user.id}`"
@@ -24,6 +23,8 @@
                             consectetur adipiscing elit.
                         </v-list-item-subtitle>
                     </v-list-item-content>
+                    <v-spacer />
+                    <v-icon>mdi-chevron-right</v-icon>
                 </v-list-item>
             </v-card-text>
             <v-card-actions>
@@ -53,6 +54,7 @@
 import client from '@/client'
 import pagination from '@/shared/pagination'
 import gql from 'graphql-tag'
+import initTheme from '@/theme'
 
 export default {
     name: 'UserListing',
@@ -105,5 +107,8 @@ export default {
         this.init(to.params.page)
         next()
     },
+    mounted() {
+        initTheme(this, 'indigo')
+    }
 }
 </script>

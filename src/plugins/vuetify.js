@@ -8,7 +8,7 @@ export default new Vuetify({
     icons: {
         iconfont: 'mdi',
     },
-    theme: {
+    /* theme: {
         themes: {
             light: {
                 primary: colors.orange.darken1,
@@ -21,5 +21,5 @@ export default new Vuetify({
                 accent: colors.orange,
             }
         }
-    }
+    } */
 })

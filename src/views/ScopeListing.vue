@@ -1,6 +1,5 @@
 <template>
     <v-container
-        class="fill-height"
         fluid
     >
         <v-card class="elevation-12 mx-auto" width="1000" tile>
@@ -14,7 +13,7 @@
             <v-card-text>
                 
                 <v-list-item
-                    class="elevation-3"
+                    class="elevation-2"
                     v-for="scope in scopes"
                     :key="scope.id"
                     :to="`/scope/${scope.id}`"
@@ -28,6 +27,8 @@
                             {{ metadataOf(scope) }}
                         </v-list-item-subtitle>
                     </v-list-item-content>
+                    <v-spacer />
+                    <v-icon>mdi-chevron-right</v-icon>
                 </v-list-item>
             </v-card-text>
             <v-card-actions>
@@ -57,6 +58,7 @@
 import client from '@/client'
 import pagination from '@/shared/pagination'
 import gql from 'graphql-tag'
+import initTheme from '@/theme'
 
 export default {
     name: 'ScopeListing',
@@ -132,5 +134,8 @@ export default {
         this.init(to.params.page)
         next()
     },
+    mounted() {
+        initTheme(this, 'orange')
+    }
 }
 </script>

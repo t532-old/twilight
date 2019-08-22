@@ -1,6 +1,5 @@
 <template>
     <v-container
-        class="fill-height"
         fluid
     >
         <v-card class="elevation-12 mx-auto" width="1000" tile>
@@ -18,7 +17,6 @@
                 </v-toolbar-title>
             </v-toolbar>
             <v-card-text>
-                <p class="text--secondary">User#{{ info.id }}</p>
                 <div class="text-uppercase">Attended Scopes</div>
                 <v-chip-group style="margin-bottom: 1.5em;">
                     <template v-for="part in info.participants">
@@ -38,6 +36,10 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer />
+                <span style="font-size: smaller" class="text--secondary">User#{{ info.id }}</span>
+            </v-card-actions>
+            <v-card-actions>
+                <v-spacer />
                 <v-dialog
                     v-model="onEdit"
                     width="768"
@@ -47,7 +49,6 @@
                             <v-icon>mdi-account-edit</v-icon>
                         </v-btn>
                     </template>
-
                     <v-card>
                         <v-card-title>Edit your account info.</v-card-title>
                         <v-card-text>
@@ -125,6 +126,7 @@ import user from '@/shared/user'
 import client from '@/client'
 import { validateID } from '@/util'
 import gql from 'graphql-tag'
+import initTheme from '@/theme'
 
 export default {
     name: 'User',
@@ -245,6 +247,7 @@ export default {
         },
     },
     async mounted() {
+        initTheme(this, 'indigo')
         try {
             const id = validateID(this.$route.params.id)
             if (id) {

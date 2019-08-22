@@ -39,6 +39,11 @@ export default new Router({
         component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue'),
         props: { mode: 'problem' }
     }, {
+        path: '/scope/:id/participants',
+        name: 'scopepart',
+        component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue'),
+        props: { mode: 'participant' }
+    }, {
         path: '/problems',
         redirect: '/problems/0',
     }, {
