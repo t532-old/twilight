@@ -42,8 +42,7 @@
                 <v-card-text>
                     <div class="text-uppercase">Description</div>
                     <v-card>
-                        <v-card-text class="text--primary markdown">
-                            {{ info.description }}
+                        <v-card-text v-html="renderedDescription" class="text--primary markdown">
                         </v-card-text>
                     </v-card>
                 </v-card-text>
@@ -214,6 +213,7 @@ import gql from 'graphql-tag'
 import ProblemListing from './sub/ProblemListing'
 import ParticipantListing from './sub/ParticipantListing'
 import initTheme from '@/theme'
+import renderMd from '@/markdown'
 
 function toMomentCompatibleString(date, time) {
     return `${date}T${time}`
@@ -256,6 +256,11 @@ export default {
     components: {
         ProblemListing,
         ParticipantListing,
+    },
+    computed: {
+        renderedDescription() {
+            return renderMd(this.info.description)
+        }
     },
     methods: {
         async update() {
@@ -383,6 +388,6 @@ export default {
             this.onError = true
             this.error = err
         }
-    }
+    },
 }
 </script>

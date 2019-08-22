@@ -11,7 +11,7 @@
                     <span class="font-weight-light">OJudge</span>
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                    Light, modern, simplistic OJ
+                    The Light, Modern, Simplistic OJ
                 </v-list-item-subtitle>
             </v-list-item-content>
         </v-list-item>

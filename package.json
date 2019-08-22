@@ -12,6 +12,8 @@
     "apollo-upload-client": "^11.0.0",
     "core-js": "^2.6.5",
     "graphql": "^14.4.2",
+    "katex": "^0.11.0",
+    "markdown-it": "^9.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuetify": "^2.0.0"

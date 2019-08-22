@@ -29,8 +29,7 @@
                 </v-chip-group>
                 <div class="text-uppercase">Introduction</div>
                 <v-card>
-                    <v-card-text class="text--primary markdown">
-                        {{ info.introduction }}
+                    <v-card-text v-html="renderedIntro" class="text--primary markdown">
                     </v-card-text>
                 </v-card>
             </v-card-text>
@@ -97,7 +96,7 @@
                     <template v-slot:activator="{ on }">
                         <v-btn v-on="on" v-if="user.info.isAdmin" icon @click="toggleAdmin">
                             <span v-if="info.isAdmin">
-                                <v-icon>mdi-account-alert-outline</v-icon>
+                                <v-icon>mdi-account-check-outline</v-icon>
                             </span>
                             <span v-else>
                                 <v-icon>mdi-account-check</v-icon>
@@ -127,6 +126,7 @@ import client from '@/client'
 import { validateID } from '@/util'
 import gql from 'graphql-tag'
 import initTheme from '@/theme'
+import renderMd from '@/markdown'
 
 export default {
     name: 'User',
@@ -146,6 +146,9 @@ export default {
     computed: {
         isSelf() {
             return this.info.id === user.info.id
+        },
+        renderedIntro() {
+            return renderMd(this.info.introduction)
         }
     },
     methods: {
@@ -247,7 +250,7 @@ export default {
         },
     },
     async mounted() {
-        initTheme(this, 'indigo')
+        initTheme(this, 'red')
         try {
             const id = validateID(this.$route.params.id)
             if (id) {

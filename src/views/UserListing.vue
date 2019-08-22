@@ -18,10 +18,12 @@
                     :to="`/user/${user.id}`"
                 >
                     <v-list-item-content>
-                        <v-list-item-title>{{ user.username }}</v-list-item-title>
-                        <v-list-item-subtitle>
-                            consectetur adipiscing elit.
-                        </v-list-item-subtitle>
+                        <v-list-item-title>
+                            <span class="text--secondary">
+                                {{ user.isAdmin ? 'Admin' : 'User' }} ::
+                            </span>
+                            {{ user.username }}
+                        </v-list-item-title>
                     </v-list-item-content>
                     <v-spacer />
                     <v-icon>mdi-chevron-right</v-icon>
@@ -81,6 +83,7 @@ export default {
                         ) {
                             id
                             username
+                            isAdmin
                         }
                     }`,
                     variables: {
@@ -108,7 +111,7 @@ export default {
         next()
     },
     mounted() {
-        initTheme(this, 'indigo')
+        initTheme(this, 'red')
     }
 }
 </script>

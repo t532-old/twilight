@@ -6,7 +6,7 @@ Twilight a.k.a. WhoJudge FE
 - [ ] Home
 - [x] Login
 - [ ] Register
-- [ ] About
+- [x] About
 - [ ] Scope
     - [ ] Searching
     - [x] Listing

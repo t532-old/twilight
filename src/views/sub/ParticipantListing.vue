@@ -12,6 +12,7 @@
                             <span class="text--secondary">Rank #{{ idx + 1 }}</span>
                             {{ part.user.username }}
                         </span>
+                        {{ part.score.reduce((a, i) => a + i.score, 0) }} Points
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
                         <v-list class="elevation-2">

@@ -50,3 +50,9 @@ export default {
     }
 };
 </script>
+
+<style>
+pre {
+    font-family: 'Ubuntu Mono', 'Fira Code', 'Consolas', 'Monaco', 'Menlo', monospace !important;
+}
+</style>
