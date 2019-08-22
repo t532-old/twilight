@@ -11,9 +11,14 @@ export default new Vuetify({
     theme: {
         themes: {
             light: {
+                primary: colors.orange.darken1,
+                secondary: colors.orange.lighten2,
+                accent: colors.indigo.lighten2,
+            },
+            dark: {
                 primary: colors.indigo.darken1,
-                secondary: colors.indigo.lighten4,
-                accent: colors.pink
+                secondary: colors.indigo.lighten2,
+                accent: colors.orange,
             }
         }
     }

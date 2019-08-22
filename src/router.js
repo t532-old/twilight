@@ -17,32 +17,54 @@ export default new Router({
         component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     }, {
         path: '/scopes',
+        redirect: '/scopes/0',
+    }, {
+        path: '/scopes/:page',
         name: 'scopelisting',
         component: () => import(/* webpackChunkName: "scopelisting" */ './views/ScopeListing.vue')
     }, {
         path: '/scope/:id',
-        name: 'scope',
-        component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue')
+        redirect: to => `/scope/${to.params.id}/info`,
     }, {
-        path: '/problems/:scope',
-        name: 'problisting',
-        component: () => import(/* webpackChunkName: "problisting" */ './views/ProblemListing.vue')
+        path: '/scope/:id/info',
+        name: 'scopeinfo',
+        component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue'),
+        props: { mode: 'info' }
     }, {
-        path: '/problem/:id',
-        name: 'prob',
-        component: () => import(/* webpackChunkName: "prob" */ './views/Problem.vue')
+        path: '/scope/:id/problems',
+        redirect: to => `/scope/${to.params.id}/problems/0`
     }, {
-        path: '/users',
+        path: '/scope/:id/problems/:page',
+        name: 'scopeprob',
+        component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue'),
+        props: { mode: 'problem' }
+    }, {
+        path: '/problems',
+        redirect: '/problems/0',
+    }, {
+        path: '/problem/:id/info',
+        name: 'probinfo',
+        component: () => import(/* webpackChunkName: "prob" */ './views/Problem.vue'),
+        props: { mode: 'info' }
+    }, {
+        path: '/problem/:id/submissions/',
+        redirect: to => `/problems/${to.params.id}/submissions/0`
+    }, {
+        path: '/problem/:id/submissions/:page',
+        name: 'probsub',
+        component: () => import(/* webpackChunkName: "prob" */ './views/Problem.vue'),
+        props: { mode: 'submissions' },
+    }, {
+        path: '/users/:page',
         name: 'userlisting',
         component: () => import(/* webpackChunkName: "userlisting" */ './views/UserListing.vue')
+    }, {
+        path: '/users',
+        redirect: '/users/0',
     }, {
         path: '/user/:id',
         name: 'user',
         component: () => import(/* webpackChunkName: "user" */ './views/User.vue')
-    }, {
-        path: '/submissions/:problem',
-        name: 'sublisting',
-        component: () => import(/* webpackChunkName: "sublisting" */ './views/SubmissionListing.vue')
     }, {
         path: '/submission/:id',
         name: 'sub',

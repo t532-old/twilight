@@ -1,29 +1,36 @@
-# twillight
+# twilight
 
-## Project setup
-```
-npm install
-```
+Twilight a.k.a. WhoJudge FE
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## Roadmap
+- [ ] Home
+- [x] Login
+- [ ] Register
+- [ ] About
+- [ ] Scope
+    - [ ] Searching
+    - [x] Listing
+    - [ ] Creation
+    - [ ] Display
+        - [ ] Info
+        - [ ] Problem
+            - [ ] Searching
+            - [ ] Listing
+        - [x] Skippable
+        - [ ] Contest
+    - [ ] Modify
+    - [ ] Create Participant
+    - [ ] Create Problem
+- [x] User
+    - [x] Listing
+    - [x] Display
+    - [x] Modify
+- [ ] Problem
+    - [ ] Display
+        - [ ] Info
+        - [ ] Submission
+            - [ ] Searching
+            - [ ] Listing
+    - [ ] Create Submission
+    - [ ] Submitting
+- [ ] Submission Display
