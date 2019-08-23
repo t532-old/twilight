@@ -20,6 +20,14 @@
         </v-card-text>
         <v-card-actions>
             <v-spacer></v-spacer>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" @click="createProblem" v-if="user.info.isAdmin" icon>
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </template>
+                <span>Create Problem</span>
+            </v-tooltip>
             <v-btn color="primary" :to="String(Number($route.params.page) - 1)" v-if="Number($route.params.page)" icon>
                 <v-icon>mdi-arrow-left</v-icon>
             </v-btn>
@@ -42,7 +50,9 @@
 
 <script>
 import client from '@/client'
+import user from '@/shared/user'
 import pagination from '@/shared/pagination'
+import router from '@/router'
 import gql from 'graphql-tag'
 
 export default {
@@ -55,6 +65,7 @@ export default {
         error: null,
         orderBy: 'order_ASC',
         pagination,
+        user,
     }),
     watch: {
         scopeInfo() {
@@ -97,6 +108,29 @@ export default {
                         }
                     }
                 })).data.problems
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        },
+        async createProblem() {
+            try {
+                const newProb = (await client.mutate({
+                    mutation: gql`mutation createProb($idInput: ID!) {
+                        createProblem(scope: $idInput) {
+                            id
+                        }
+                    }`,
+                    variables: {
+                        idInput: this.scopeInfo.id,
+                    },
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })).data.createProblem
+                router.push({ path: `/problem/${newProb.id}` })
             } catch (err) {
                 this.onError = true
                 this.error = err

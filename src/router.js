@@ -44,16 +44,21 @@ export default new Router({
         component: () => import(/* webpackChunkName: "scope" */ './views/Scope.vue'),
         props: { mode: 'participant' }
     }, {
-        path: '/problems',
-        redirect: '/problems/0',
+        path: '/problem/:id',
+        redirect: to => `/problem/${to.params.id}/info`,
     }, {
         path: '/problem/:id/info',
         name: 'probinfo',
         component: () => import(/* webpackChunkName: "prob" */ './views/Problem.vue'),
         props: { mode: 'info' }
     }, {
-        path: '/problem/:id/submissions/',
-        redirect: to => `/problems/${to.params.id}/submissions/0`
+        path: '/problem/:id/submit',
+        name: 'probcrsub',
+        component: () => import(/* webpackChunkName: "prob" */ './views/Problem.vue'),
+        props: { mode: 'submit' }
+    }, {
+        path: '/problem/:id/submissions',
+        redirect: to => `/problem/${to.params.id}/submissions/0`
     }, {
         path: '/problem/:id/submissions/:page',
         name: 'probsub',

@@ -33,6 +33,14 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                        <v-btn v-on="on" @click="createScope" v-if="user.info.isAdmin" icon>
+                            <v-icon>mdi-plus</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>Create Scope</span>
+                </v-tooltip>
                 <v-btn color="primary" :to="String(Number($route.params.page) - 1)" v-if="Number($route.params.page)" icon>
                     <v-icon>mdi-arrow-left</v-icon>
                 </v-btn>
@@ -59,6 +67,8 @@ import client from '@/client'
 import pagination from '@/shared/pagination'
 import gql from 'graphql-tag'
 import initTheme from '@/theme'
+import router from '@/router'
+import user from '@/shared/user'
 
 export default {
     name: 'ScopeListing',
@@ -68,6 +78,7 @@ export default {
         onError: false,
         error: null,
         pagination,
+        user,
     }),
     methods: {
         async init(page = this.$route.params.page) {
@@ -104,6 +115,26 @@ export default {
                         }
                     }
                 })).data.scopes
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        },
+        async createScope() {
+            try {
+                const newScope = (await client.mutate({
+                    mutation: gql`mutation createScope {
+                        createScope {
+                            id
+                        }
+                    }`,
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })).data.createScope
+                router.push({ path: `/scope/${newScope.id}` })
             } catch (err) {
                 this.onError = true
                 this.error = err

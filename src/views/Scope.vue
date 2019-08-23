@@ -40,8 +40,9 @@
             </v-toolbar>
             <template v-if="mode === 'info'">
                 <v-card-text>
-                    <div class="text-uppercase">Description</div>
+                    <p>{{ metadata }}</p>
                     <v-card>
+                        <v-card-title>Description</v-card-title>
                         <v-card-text v-html="renderedDescription" class="text--primary markdown">
                         </v-card-text>
                     </v-card>
@@ -52,6 +53,14 @@
                 </v-card-actions>
                 <v-card-actions>
                     <v-spacer />
+                    <v-tooltip top>
+                        <template v-slot:activator="{ on }">
+                            <v-btn v-on="on" @click="deleteScope" v-if="user.info.isAdmin" icon>
+                                <v-icon>mdi-pencil-off</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Delete Scope</span>
+                    </v-tooltip>
                     <v-dialog
                         v-model="onEdit"
                         width="768"
@@ -214,6 +223,7 @@ import ProblemListing from './sub/ProblemListing'
 import ParticipantListing from './sub/ParticipantListing'
 import initTheme from '@/theme'
 import renderMd from '@/markdown'
+import router from '@/router'
 
 function toMomentCompatibleString(date, time) {
     return `${date}T${time}`
@@ -238,6 +248,9 @@ export default {
             visible: true,
             from: null,
             to: null,
+            creator: {
+                username: '...'
+            },
         },
         participant: {
             id: '...',
@@ -260,6 +273,14 @@ export default {
     computed: {
         renderedDescription() {
             return renderMd(this.info.description)
+        },
+        metadata() {
+            const md = [`Created by ${this.info.creator.username}`]
+            if (this.info.isContest)
+                md.push(`Contest (${this.info.contestMode})`)
+            if (this.info.isLinear)
+                md.push(`Linear/Storied (${this.info.skippable} steps skippable)`)
+            return md.join(' · ')
         }
     },
     methods: {
@@ -324,7 +345,32 @@ export default {
                 this.onError = true
                 this.error = err
             }
-        }
+        },
+        async deleteScope() {
+            try {
+                await client.mutate({
+                    mutation: gql`mutation delScope(
+                        $idInput: ID!
+                    ) {
+                        deleteScope(id: $idInput) {
+                            id
+                        }
+                    }`,
+                    variables: {
+                        idInput: this.info.id,
+                    },
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })
+                router.push({ path: '/scopes' })
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        },
     },
     async mounted() {
         initTheme(this, 'orange')
@@ -344,6 +390,9 @@ export default {
                             visible
                             from
                             to
+                            creator {
+                                username
+                            }
                         }
                     }`,
                     variables: {

@@ -11,27 +11,31 @@ Twilight a.k.a. WhoJudge FE
     - [ ] Searching
     - [x] Listing
     - [ ] Display
-        - [ ] Info
+        - [x] Info
         - [ ] Problem
             - [ ] Searching
             - [x] Listing
         - [x] Skippable
         - [x] Contest
-    - [ ] Modify
+    - [x] Modify
     - [ ] Create
-        - [ ] Scope
-        - [ ] Problem
+        - [x] Scope
+        - [x] Problem
         - [ ] Participant
+    - [x] Deletion
 - [x] User
     - [x] Listing
     - [x] Display
     - [x] Modify
 - [ ] Problem
     - [ ] Display
-        - [ ] Info
+        - [x] Info
         - [ ] Submission
             - [ ] Searching
             - [ ] Listing
     - [ ] Create
         - [ ] Submission
-- [ ] Submission Display
+    - [x] Modify
+    - [x] Deletion
+- [ ] Submission
+    - [ ] Display
