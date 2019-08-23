@@ -59,7 +59,7 @@
                 </v-btn>
             </v-card-actions>
             <v-card-actions>
-                <v-btn href="https://github.com/t532" text>
+                <v-btn href="https://github.com/StephaneZhang" text>
                     <v-icon>mdi-dev-to</v-icon>
                     Dev@StephaneZ
                 </v-btn>
