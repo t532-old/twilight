@@ -52,19 +52,21 @@
 import user from '@/shared/user'
 import client from '@/client'
 import gql from 'graphql-tag'
+import router from '@/router'
 export default {
     name: 'Login',
     methods: {
         async login() {
-            let id, user
             try {
-                ({ data: { createToken: { id, user } } } = await client.mutate({
+                const token = (await client.mutate({
                     mutation: gql`mutation login($inputUsername: String!, $inputPass: String!) {
                         createToken(username: $inputUsername, pass: $inputPass) {
                             id
+                            token
                             user {
                                 id
                                 username
+                                isAdmin
                             }
                         }
                     }`,
@@ -72,15 +74,16 @@ export default {
                         inputUsername: this.username,
                         inputPass: this.pass,
                     }
-                }))
+                })).data.createToken
+                this.user.info = token.user
+                localStorage.setItem('userToken', token.token)
+                router.push({ path: '/' })
             } catch (err) {
                 this.onError = true
                 this.error = err
                 return
             }
-            this.user.info = user
-            localStorage.setItem('userToken', id)
-            location.pathname = '/'
+            
         }
     },
     data: () => ({
