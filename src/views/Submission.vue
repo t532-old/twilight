@@ -73,6 +73,18 @@
                         </v-expansion-panel>
                     </v-expansion-panels>
                 </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <span style="font-size: smaller" class="text--secondary">Submission#{{ info.id }}</span>
+                </v-card-actions>
+                <v-card-actions>
+                    <v-spacer />
+                    <router-link :to="`/user/${info.user.id}`" style="font-size: smaller" class="text--secondary">By {{ info.user.username }} (User#{{ info.user.id }})</router-link>
+                </v-card-actions>
+                <v-card-actions>
+                    <v-spacer />
+                    <router-link :to="`/problem/${info.problem.id}`" style="font-size: smaller" class="text--secondary">At {{ info.problem.title }} (Problem#{{ info.problem.id }})</router-link>
+                </v-card-actions>
             </template>
             
             <template v-if="mode === 'code'">
@@ -104,6 +116,7 @@ import gql from 'graphql-tag'
 import router from '@/router'
 import Prism from 'prismjs'
 import loadHighlights from '@/loadHighlights'
+
 loadHighlights(Prism)
 
 export default {
@@ -189,13 +202,21 @@ export default {
                         headers: {
                             Authorization: localStorage.getItem('userToken')
                         }
-                    }
+                    },
+                    fetchPolicy: 'network-only'
                 })).data.submission
-                this.highlightCode()
             } catch (err) {
                 this.onError = true
                 this.error = err
             }
+        },
+        poll() {
+            const thisRef = this
+            setTimeout(async () => {
+                await this.init()
+                if (this.info.status === 'JUDGING')
+                    this.poll()
+            }, 2500)
         },
         highlightCode() {
             this.highlightedCode = Prism.highlight(
@@ -205,9 +226,11 @@ export default {
             )
         }
     },
-    mounted() {
+    async mounted() {
         initTheme(this, 'indigo')
-        this.init()
+        await this.init()
+        this.highlightCode()
+        this.poll()
     }
 }
 </script>
