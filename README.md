@@ -35,9 +35,9 @@ Twilight a.k.a. WhoJudge FE
         - [ ] Submission
             - [ ] Searching
             - [ ] Listing
-    - [ ] Create
-        - [ ] Submission
+    - [x] Create
+        - [x] Submission
     - [x] Modify
     - [x] Deletion
-- [ ] Submission
-    - [ ] Display
+- [x] Submission
+    - [x] Display

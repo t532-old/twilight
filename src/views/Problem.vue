@@ -13,6 +13,10 @@
                         Problem ::
                     </span>
                     {{ info.title }}
+                    <v-chip
+                        v-for="tag in info.tags"
+                        :key="tag"
+                    >{{ tag }}</v-chip>
                 </v-toolbar-title>
                 <template v-slot:extension>
                     <v-tabs
@@ -116,6 +120,11 @@
 
                 <v-card-actions>
                     <v-spacer />
+                    <router-link :to="`/scope/${info.scope.id}`" style="font-size: smaller" class="text--secondary">At {{ info.scope.title }} (Scope#{{ info.scope.id }})</router-link>
+                </v-card-actions>
+
+                <v-card-actions>
+                    <v-spacer />
                     <v-tooltip top>
                         <template v-slot:activator="{ on }">
                             <v-btn v-on="on" @click="deleteProblem" v-if="user.info.isAdmin" icon>
@@ -156,6 +165,14 @@
                                         v-model="info.order"
                                         @input="info.order = Number(info.order)"
                                     />
+                                    <v-combobox
+                                        v-model="info.tags"
+                                        :items="[]"
+                                        prepend-icon="mdi-tag"
+                                        label="Tags"
+                                        multiple
+                                        chips
+                                    ></v-combobox>
                                     <v-card-title>Content</v-card-title>
                                     <v-textarea
                                         label="Story"
@@ -313,6 +330,24 @@
                     </v-dialog>
                 </v-card-actions>
             </template>
+
+            <template v-if="mode === 'submit'">
+                <v-card-text>
+                    <v-select
+                        :items="languages"
+                        label="Language"
+                        v-model="submission.language"
+                    />
+                    <v-textarea
+                        v-model="submission.code"
+                        label="Code"
+                    ></v-textarea>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn @click="submit" class="primary">Submit</v-btn>
+                </v-card-actions>
+            </template>
         </v-card>
         <v-snackbar v-model="onError">
             {{ error ? error.message.split(':')[1] : 'Something went wrong' }}
@@ -353,9 +388,15 @@ export default {
             tips: '',
             examples: [],
             testcases: [],
+            tags: [],
             visible: false,
             order: -1,
         },
+        submission: {
+            language: 'cpp',
+            code: '',
+        },
+        languages: ['cpp', 'cpp11', 'python3'],
         showStoryOverlay: false,
         onError: false,
         error: null,
@@ -376,6 +417,7 @@ export default {
                         problem(id: $idInput) {
                             scope {
                                 id
+                                title
                             }
                             id
                             title
@@ -387,6 +429,7 @@ export default {
                             tips
                             visible
                             order
+                            tags
                             examples {
                                 input
                                 output
@@ -473,6 +516,7 @@ export default {
                             memory: i.memory,
                             point: i.point
                         })),
+                    tags: this.info.tags.map(i => i),
                     tips: this.info.tips,
                     title: this.info.title,
                     visible: this.info.visible,
@@ -532,6 +576,39 @@ export default {
                 this.error = err
             }
         },
+        async submit() {
+            try {
+                const submission = (await client.mutate({
+                    mutation: gql`mutation submit(
+                        $idInput: ID!
+                        $langInput: String!
+                        $codeInput: String!
+                    ) {
+                        createSubmission(
+                            problem: $idInput
+                            language: $langInput
+                            code: $codeInput
+                        ) {
+                            id
+                        }
+                    }`,
+                    variables: {
+                        idInput: this.info.id,
+                        langInput: this.submission.language,
+                        codeInput: this.submission.code,
+                    },
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })).data.createSubmission
+                router.push({ path: `/submission/${submission.id}` })
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        }
     },
     mounted() {
         initTheme(this, 'blue')

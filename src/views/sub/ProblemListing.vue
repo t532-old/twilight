@@ -11,7 +11,10 @@
                     <v-list-item-title>
                         <span class="text--secondary">Problem #{{ problem.order + 1 }} ::</span>
                         {{ problem.title }}
-                        
+                        <v-chip
+                            v-for="tag in problem.tags"
+                            :key="tag"
+                        >{{ tag }}</v-chip>
                     </v-list-item-title>
                 </v-list-item-content>
                 <v-spacer />
@@ -60,6 +63,7 @@ export default {
     props: ['scopeInfo', 'page'],
     data: () => ({
         problems: [],
+        tags: [],
         filter: {},
         onError: false,
         error: null,
@@ -93,6 +97,7 @@ export default {
                             order
                             id
                             title
+                            tags
                         }
                     }`,
                     variables: {

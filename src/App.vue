@@ -29,11 +29,11 @@ export default {
         user,
     }),
     async mounted() {
-        const token = validateID(localStorage.getItem('userToken'))
+        const token = localStorage.getItem('userToken')
         if (token) {
             const { data: { token } } = await client.query({
-                query: gql`query userInfo($userToken: ID!) {
-                    token(id: $userToken) {
+                query: gql`query userInfo($userToken: String!) {
+                    token(token: $userToken) {
                         user {
                             isAdmin
                             id
@@ -54,5 +54,27 @@ export default {
 <style>
 pre {
     font-family: 'Ubuntu Mono', 'Fira Code', 'Consolas', 'Monaco', 'Menlo', monospace !important;
+}
+
+pre[class*="language-"] {
+    background: hsl(0, 0%, 8%) !important;
+}
+
+pre[class*="language-"] code {
+    background: none !important;
+    color: #f8f8f2 !important;
+    font-family: 'Ubuntu Mono', 'Fira Code', 'Consolas', 'Monaco', 'Menlo', monospace !important;
+    font-size: 1em !important;
+    box-shadow: none !important;
+}
+
+pre[class*="language-"] code::before {
+    letter-spacing: initial !important;
+    content: initial !important;
+}
+
+pre[class*="language-"] code::after {
+    letter-spacing: initial !important;
+    content: initial !important;
 }
 </style>

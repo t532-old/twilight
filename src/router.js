@@ -77,8 +77,17 @@ export default new Router({
         component: () => import(/* webpackChunkName: "user" */ './views/User.vue')
     }, {
         path: '/submission/:id',
-        name: 'sub',
-        component: () => import(/* webpackChunkName: "sub" */ './views/Submission.vue')
+        redirect: to => `/submission/${to.params.id}/status`
+    }, {
+        path: '/submission/:id/status',
+        name: 'substat',
+        component: () => import(/* webpackChunkName: "sub" */ './views/Submission.vue'),
+        props: { mode: 'status' },
+    }, {
+        path: '/submission/:id/code',
+        name: 'subcode',
+        component: () => import(/* webpackChunkName: "sub" */ './views/Submission.vue'),
+        props: { mode: 'code' },
     }, {
         path: '/login',
         name: 'login',
