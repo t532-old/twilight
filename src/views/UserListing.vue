@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import client from '@/client'
+import client from '@/util/client'
 import pagination from '@/shared/pagination'
 import gql from 'graphql-tag'
-import initTheme from '@/theme'
+import initTheme from '@/util/theme'
 
 export default {
     name: 'UserListing',

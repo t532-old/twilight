@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import initTheme from '@/theme'
+import initTheme from '@/util/theme'
 export default {
     name: 'About',
     mounted() {

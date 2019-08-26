@@ -50,7 +50,7 @@
 
 <script>
 import user from '@/shared/user'
-import client from '@/client'
+import client from '@/util/client'
 import gql from 'graphql-tag'
 import router from '@/router'
 export default {

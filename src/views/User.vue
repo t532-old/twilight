@@ -39,6 +39,10 @@
             </v-card-actions>
             <v-card-actions>
                 <v-spacer />
+                <span style="font-size: smaller" class="text--secondary">Created At {{ info.createdAt }}</span>
+            </v-card-actions>
+            <v-card-actions>
+                <v-spacer />
                 <v-dialog
                     v-model="onEdit"
                     width="768"
@@ -122,11 +126,11 @@
 
 <script>
 import user from '@/shared/user'
-import client from '@/client'
-import { validateID } from '@/util'
+import client from '@/util/client'
+import { validateID } from '@/util/misc'
 import gql from 'graphql-tag'
-import initTheme from '@/theme'
-import renderMd from '@/markdown'
+import initTheme from '@/util/theme'
+import renderMd from '@/util/markdown'
 
 export default {
     name: 'User',
@@ -261,6 +265,7 @@ export default {
                             username
                             introduction
                             isAdmin
+                            createdAt
                             participants {
                                 id
                                 scope {

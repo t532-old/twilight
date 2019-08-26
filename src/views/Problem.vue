@@ -120,6 +120,11 @@
 
                 <v-card-actions>
                     <v-spacer />
+                    <span style="font-size: smaller" class="text--secondary">Created At {{ info.createdAt }}</span>
+                </v-card-actions>
+
+                <v-card-actions>
+                    <v-spacer />
                     <router-link :to="`/scope/${info.scope.id}`" style="font-size: smaller" class="text--secondary">At {{ info.scope.title }} (Scope#{{ info.scope.id }})</router-link>
                 </v-card-actions>
 
@@ -348,6 +353,10 @@
                     <v-btn @click="submit" class="primary">Submit</v-btn>
                 </v-card-actions>
             </template>
+
+            <template v-if="mode === 'submissions'">
+                <SubmissionListing :problemInfo="info" />
+            </template>
         </v-card>
         <v-snackbar v-model="onError">
             {{ error ? error.message.split(':')[1] : 'Something went wrong' }}
@@ -363,12 +372,13 @@
 </template>
 
 <script>
-import initTheme from '@/theme'
-import client from '@/client'
-import render from '@/markdown'
+import initTheme from '@/util/theme'
+import client from '@/util/client'
+import render from '@/util/markdown'
 import user from '@/shared/user'
 import gql from 'graphql-tag'
 import router from '@/router'
+import SubmissionListing from './sub/SubmissionListing'
 export default {
     name: 'Problem',
     props: ['mode'],
@@ -409,6 +419,9 @@ export default {
             OUT: false,
         },
     }),
+    components: {
+        SubmissionListing,
+    },
     methods: {
         async init() {
             try {
@@ -430,6 +443,7 @@ export default {
                             visible
                             order
                             tags
+                            createdAt
                             examples {
                                 input
                                 output

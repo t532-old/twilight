@@ -108,14 +108,15 @@
 </template>
 
 <script>
-import initTheme from '@/theme'
-import client from '@/client'
-import render from '@/markdown'
+import initTheme from '@/util/theme'
+import client from '@/util/client'
+import render from '@/util/markdown'
 import user from '@/shared/user'
 import gql from 'graphql-tag'
 import router from '@/router'
 import Prism from 'prismjs'
-import loadHighlights from '@/loadHighlights'
+import loadHighlights from '@/util/loadHighlights'
+import { submissionStatus } from '@/util/palette'
 
 loadHighlights(Prism)
 
@@ -139,20 +140,7 @@ export default {
             status: 'UNKNOWN',
             language: 'cpp',
         },
-        colorMap: {
-            JUDGING: 'blue',
-            ACCEPTED: 'green',
-            NOT_ACCEPTED: 'red',
-            ERROR: 'orange',
-            WRONG_ANSWER: 'red',
-            PARTIALLY_CORRECT: 'orange',
-            TIME_LIMIT_EXCEEDED: 'indigo',
-            MEMORY_LIMIT_EXCEEDED: 'indigo',
-            RUNTIME_ERROR: 'purple',
-            SPECIAL_JUDGE_ERROR: 'gray',
-            COMPILE_ERROR: 'gray',
-            UNKNOWN_ERROR: 'gray',
-        },
+        colorMap: submissionStatus,
         langMap: {
             cpp: 'cpp',
             cpp11: 'cpp',

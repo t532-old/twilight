@@ -9,8 +9,11 @@
                 >
                     <v-expansion-panel-header>
                         <span>
-                            <span class="text--secondary">Rank #{{ idx + 1 }}</span>
-                            {{ part.user.username }}
+                            <span class="text--secondary">Rank #{{ idx + 1 }}&nbsp;</span>
+                            <router-link
+                                :to="`/user/${part.user.id}`"
+                                class="text--primary"
+                            >{{ part.user.username }}</router-link>
                         </span>
                         {{ part.score.reduce((a, i) => a + i.score, 0) }} Points
                     </v-expansion-panel-header>
@@ -44,7 +47,7 @@
 </template>
 
 <script>
-import client from '@/client'
+import client from '@/util/client'
 import gql from 'graphql-tag'
 
 export default {
@@ -71,6 +74,7 @@ export default {
                             id: $scopeInput
                         ) {
                             user {
+                                id
                                 username
                             }
                             score
@@ -90,13 +94,6 @@ export default {
                 this.error = err
             }
         }
-    },
-    beforeRouteEnter(_1, _2, next) {
-        next(vm => vm.init())
-    },
-    beforeRouteUpdate(_1, _2, next) {
-        this.init()
-        next()
     },
     mounted() {
         this.init()

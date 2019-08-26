@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import initTheme from '@/theme'
+import initTheme from '@/util/theme'
 import user from '@/shared/user'
 export default {
     name: 'Home',

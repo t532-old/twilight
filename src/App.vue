@@ -16,8 +16,8 @@ import NavDrawer from './components/NavDrawer'
 import AppBar from './components/AppBar'
 
 import user from './shared/user'
-import client from './client'
-import { validateID } from './util'
+import client from '@/util/client'
+import { validateID } from '@/util/misc'
 
 export default {
     name: 'App',

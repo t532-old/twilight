@@ -63,10 +63,10 @@
 </template>
 
 <script>
-import client from '@/client'
+import client from '@/util/client'
 import pagination from '@/shared/pagination'
 import gql from 'graphql-tag'
-import initTheme from '@/theme'
+import initTheme from '@/util/theme'
 import router from '@/router'
 import user from '@/shared/user'
 

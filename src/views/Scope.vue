@@ -13,7 +13,14 @@
                         Scope ::
                     </span>
                     {{ info.title }}
+                   
+                    
                 </v-toolbar-title>
+                <v-spacer />
+                <v-btn
+                    @click="createParticipant"
+                    v-if="!participant"
+                >Join</v-btn>
                 <template v-slot:extension>
                     <v-tabs
                         v-model="tab"
@@ -50,6 +57,10 @@
                 <v-card-actions>
                     <v-spacer />
                     <span style="font-size: smaller" class="text--secondary">Scope#{{ info.id }}</span>
+                </v-card-actions>
+                <v-card-actions>
+                    <v-spacer />
+                    <span style="font-size: smaller" class="text--secondary">Created At {{ info.createdAt }}</span>
                 </v-card-actions>
                 <v-card-actions>
                     <v-spacer />
@@ -216,13 +227,13 @@
 
 <script>
 import user from '@/shared/user'
-import client from '@/client'
-import { validateID } from '@/util'
+import client from '@/util/client'
+import { validateID } from '@/util/misc'
 import gql from 'graphql-tag'
 import ProblemListing from './sub/ProblemListing'
 import ParticipantListing from './sub/ParticipantListing'
-import initTheme from '@/theme'
-import renderMd from '@/markdown'
+import initTheme from '@/util/theme'
+import renderMd from '@/util/markdown'
 import router from '@/router'
 
 function toMomentCompatibleString(date, time) {
@@ -284,6 +295,33 @@ export default {
         }
     },
     methods: {
+        async createParticipant() {
+            try {
+                await client.mutate({
+                    mutation: gql`mutation join(
+                        $idInput: ID!
+                    ) {
+                        createParticipant(
+                            scope: $idInput
+                        ) {
+                            id
+                        }
+                    }`,
+                    variables: {
+                        idInput: this.info.id,
+                    },
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })
+                await this.fetchParticipant()
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        },
         async update() {
             const updateData = {
                 title: this.info.title,
@@ -371,6 +409,31 @@ export default {
                 this.error = err
             }
         },
+        async fetchParticipant() {
+            try {
+                this.participant = (await client.query({
+                    query: gql`query selfParticipant($userInput: ID!, $scopeInput: ID!) {
+                        participant(user: $userInput, scope: $scopeInput) {
+                            id
+                            step
+                            skippedStep
+                        }
+                    }`,
+                    variables: {
+                        userInput: user.info.id,
+                        scopeInput: this.info.id,
+                    },
+                    context: {
+                        headers: {
+                            Authorization: localStorage.getItem('userToken')
+                        }
+                    }
+                })).data.participant
+            } catch (err) {
+                this.onError = true
+                this.error = err
+            }
+        }
     },
     async mounted() {
         initTheme(this, 'orange')
@@ -390,6 +453,7 @@ export default {
                             visible
                             from
                             to
+                            createdAt
                             creator {
                                 username
                             }
@@ -414,24 +478,7 @@ export default {
                     this.toTime = this.info.to.slice(11, 19)
                     this.hasTo = true
                 }
-                this.participant = (await client.query({
-                    query: gql`query selfParticipant($userInput: ID!, $scopeInput: ID!) {
-                        participant(user: $userInput, scope: $scopeInput) {
-                            id
-                            step
-                            skippedStep
-                        }
-                    }`,
-                    variables: {
-                        userInput: user.info.id,
-                        scopeInput: this.info.id,
-                    },
-                    context: {
-                        headers: {
-                            Authorization: localStorage.getItem('userToken')
-                        }
-                    }
-                })).data.participant
+                await this.fetchParticipant()
             }
         } catch (err) {
             this.onError = true
